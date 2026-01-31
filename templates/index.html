@@ -1,0 +1,25 @@
+nano templates/index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask App</title>
+</head>
+<body>
+    <h2>Flask Templates Working</h2>
+
+    <form action="/predict" method="post">
+        <input type="number" name="age" placeholder="Age" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if prediction_text %}
+        <p>{{ prediction_text }}</p>
+    {% endif %}
+
+
+</body>
+</html>
+
+
+
+
