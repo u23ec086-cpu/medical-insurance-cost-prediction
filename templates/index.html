@@ -1,51 +1,158 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Medical Insurance Prediction</title>
+    <meta charset="UTF-8">
+    <title>Medical Insurance Cost Predictor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 480px;
+            padding: 30px 35px;
+            border-radius: 14px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h2 {
+            text-align: center;
+            margin-bottom: 5px;
+            color: #222;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            margin-top: 6px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #4facfe;
+            box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.2);
+        }
+
+        button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #4facfe, #00c6ff);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f0f9ff;
+            border-left: 5px solid #4facfe;
+            font-weight: bold;
+            color: #0a3d62;
+            text-align: center;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>Medical Insurance Cost Predictor</h2>
+<div class="card">
+    <h2>Insurance Cost Predictor</h2>
+    <div class="subtitle">
+        Estimate your annual medical insurance charges
+    </div>
 
-<form action="/predict" method="post">
+    <form action="/predict" method="post">
 
-    <label>Age:</label><br>
-    <input type="number" name="age" required><br><br>
+        <label>Age</label>
+        <input type="number" name="age" min="1" max="100" required>
 
-    <label>BMI:</label><br>
-    <input type="number" step="any" name="bmi" required><br><br>
+        <label>BMI</label>
+        <input type="number" step="any" name="bmi" placeholder="e.g. 24.5" required>
 
-    <label>Children:</label><br>
-    <input type="number" name="children" required><br><br>
+        <label>Number of Children</label>
+        <input type="number" name="children" min="0" max="10" required>
 
-    <label>Sex:</label><br>
-    <select name="sex" required>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-    </select><br><br>
+        <label>Sex</label>
+        <select name="sex" required>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
 
-    <label>Smoker:</label><br>
-    <select name="smoker" required>
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
-    </select><br><br>
+        <label>Smoker</label>
+        <select name="smoker" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
 
-    <label>Region:</label><br>
-    <select name="region" required>
-        <option value="northeast">Northeast</option>
-        <option value="northwest">Northwest</option>
-        <option value="southeast">Southeast</option>
-        <option value="southwest">Southwest</option>
-    </select><br><br>
+        <label>Region</label>
+        <select name="region" required>
+            <option value="northeast">Northeast</option>
+            <option value="northwest">Northwest</option>
+            <option value="southeast">Southeast</option>
+            <option value="southwest">Southwest</option>
+        </select>
 
-    <button type="submit">Predict</button>
+        <button type="submit">Predict Insurance Cost</button>
+    </form>
 
-</form>
+    {% if prediction_text %}
+        <div class="result">
+            {{ prediction_text }}
+        </div>
+    {% endif %}
 
-{% if prediction_text %}
-    <h3>{{ prediction_text }}</h3>
-{% endif %}
+    <div class="footer">
+        Powered by Machine Learning · Flask · Random Forest
+    </div>
+</div>
 
 </body>
 </html>
-
