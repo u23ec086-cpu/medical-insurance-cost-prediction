@@ -1,25 +1,51 @@
-nano templates/index.html
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Flask App</title>
+    <title>Medical Insurance Prediction</title>
 </head>
 <body>
-    <h2>Flask Templates Working</h2>
 
-    <form action="/predict" method="post">
-        <input type="number" name="age" placeholder="Age" required>
-        <button type="submit">Submit</button>
-    </form>
+<h2>Medical Insurance Cost Predictor</h2>
 
-    {% if prediction_text %}
-        <p>{{ prediction_text }}</p>
-    {% endif %}
+<form action="/predict" method="post">
 
+    <label>Age:</label><br>
+    <input type="number" name="age" required><br><br>
+
+    <label>BMI:</label><br>
+    <input type="number" step="any" name="bmi" required><br><br>
+
+    <label>Children:</label><br>
+    <input type="number" name="children" required><br><br>
+
+    <label>Sex:</label><br>
+    <select name="sex" required>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select><br><br>
+
+    <label>Smoker:</label><br>
+    <select name="smoker" required>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+    </select><br><br>
+
+    <label>Region:</label><br>
+    <select name="region" required>
+        <option value="northeast">Northeast</option>
+        <option value="northwest">Northwest</option>
+        <option value="southeast">Southeast</option>
+        <option value="southwest">Southwest</option>
+    </select><br><br>
+
+    <button type="submit">Predict</button>
+
+</form>
+
+{% if prediction_text %}
+    <h3>{{ prediction_text }}</h3>
+{% endif %}
 
 </body>
 </html>
-
-
-
 
