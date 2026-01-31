@@ -1,29 +1,47 @@
-from flask import Flask, request, jsonify, render_template
-import pickle
-import numpy as np
-
-# Load the trained model
-model_path = 'medical_insurance_model.pkl'
-with open(model_path, 'rb') as file:
-    model = pickle.load(file)
+from flask import Flask, render_template, request
+import joblib
+import pandas as pd
 
 app = Flask(__name__)
 
-@app.route('/')
+# ✅ LOAD WITH JOBLIB (NOT PICKLE)
+data = joblib.load("medical_insurance_model.pkl")
+model = data["model"]
+scaler = data["scaler"]
+features = data["features"]
+
+@app.route("/")
 def home():
-    return render_template('index.html')
+    return render_template("index.html")
 
-@app.route('/predict', methods=['POST'])
+@app.route("/predict", methods=["POST"])
 def predict():
-    # Extract data from form
-    int_features = [float(x) for x in request.form.values()]
-    final_features = [np.array(int_features)]
-    
-    # Make prediction
-    prediction = model.predict(final_features)
-    output = 'class0' if prediction[0] == 1 else 'class1'
+    age = int(request.form["age"])
+    bmi = float(request.form["bmi"])
+    children = int(request.form["children"])
+    sex = request.form["sex"]
+    smoker = request.form["smoker"]
+    region = request.form["region"]
 
-    return render_template('index.html', prediction_text='Prediction: {}'.format(output))
+    input_dict = {
+        "age": age,
+        "bmi": bmi,
+        "children": children,
+        "sex_male": 1 if sex == "male" else 0,
+        "smoker_yes": 1 if smoker == "yes" else 0,
+        "region_northwest": 1 if region == "northwest" else 0,
+        "region_southeast": 1 if region == "southeast" else 0,
+        "region_southwest": 1 if region == "southwest" else 0
+    }
+
+    df = pd.DataFrame([input_dict]).reindex(columns=features, fill_value=0)
+    df_scaled = scaler.transform(df)
+    prediction = model.predict(df_scaled)[0]
+
+    return render_template(
+        "index.html",
+        prediction_text=f"Predicted Insurance Cost: ₹{prediction:.2f}"
+    )
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=10000)
